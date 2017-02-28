@@ -1,0 +1,18 @@
+<h1>All Posts</h1>
+<%= form_tag(posts_path, :method => "get", id: "search-form") do %>
+<%= text_field_tag :search, params[:search], placeholder: "Search Posts" %>
+<%= submit_tag "Search" %>
+<% end %>
+
+<% if @posts.present? %>
+  <%= render @posts %>
+<% else %>
+  <p>There are no posts containing the term(s) <%= params[:search] %>.</p>
+<% end %>
+<% @posts.each do |post| %>
+<div>
+  <h2><%= link_to post.title, post_path(post) %></h2>
+  <p><%= post.body %></p>
+  <hr>
+</div>
+<% end %>
