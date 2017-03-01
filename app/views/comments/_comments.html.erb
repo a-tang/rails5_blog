@@ -1,0 +1,23 @@
+<% @post.comments.reverse_each do |comment| %>
+  <p>
+    <strong>Comment:</strong>
+    <%= comment.body %>
+    <% if comment.user_id %>
+      By: <%= comment.user_full_name.titleize %>
+      <% end %>
+      <% if can? :edit, comment %>
+        <%= link_to 'edit', edit_post_comment_path(@post, comment) %>
+    <% end %>
+      <% if can? :destroy, comment %>
+        <%= link_to 'delete', post_comment_path(@post, comment), data: {confirm: "Are you sure?"}, method: :delete %>
+    <% end %>
+  </p>
+<% end %>
+
+<% if @comment.errors.any? %>
+  <ul>
+    <% @comment.errors.full_messages.each do |msg| %>
+    <li><%= msg %></li>
+    <% end %>
+  </ul>
+  <% end %>

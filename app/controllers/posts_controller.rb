@@ -8,6 +8,8 @@ before_action :authenticate_user!, except: [:index, :show]
 
   def update
     if @post.update post_params
+      # redirect_to post_path(@post)
+      redirect_to root_path, alert: "access defined" unless can? :update, @post
       redirect_to post_path(@post)
     else
       render :edit
@@ -26,10 +28,12 @@ before_action :authenticate_user!, except: [:index, :show]
 
   def destroy
     @post.destroy
-    redirect_to posts_path
+    # redirect_to posts_path
+    redirect_to root_path, alert: "access defined" unless can? :destroy, @post
   end
 
   def edit
+    redirect_to root_path, alert: "access defined" unless can? :edit, @post
   end
 
   def index
@@ -53,6 +57,10 @@ before_action :authenticate_user!, except: [:index, :show]
 
   def find_post
     @post = Post.find params[:id]
+  end
+
+  def find_owned_post
+    @post = current_user.posts.find params[:id]
   end
 
 end

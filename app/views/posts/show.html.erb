@@ -5,35 +5,16 @@
 <p><%= @post.created_at %></p>
 
 <h2>Comments</h2>
-<% @post.comments.reverse_each do |comment| %>
-  <p>
-    <strong>Comment:</strong>
-    <%= comment.body %>
-    <% if comment.user_id %>
-    By: <%= comment.user_full_name.titleize %>
-    <% end %>
-  </p>
-<% end %>
+        <%= render "/comments/comments", comments: @post.comments %>
 
-<% if @comment.errors.any? %>
-  <ul>
-    <% @comment.errors.full_messages.each do |msg| %>
-    <li><%= msg %></li>
-    <% end %>
-  </ul>
-  <% end %>
 
 <h2>Add a comment:</h2>
-<%= form_for([@post, @post.comments.build]) do |f| %>
-  <p>
-    <%= f.label :body %><br>
-    <%= f.text_area :body %>
-  </p>
-  <p>
-    <%= f.submit %>
-  </p>
-<% end %>
+        <%= render "/comments/form", comment: @comment %>
 
-<%= link_to "Edit", edit_post_path(@post) %>
-<%= link_to "Delete", post_path(@post), method: :delete, data: {confirm: "Are you sure"} %>
+<% if can? :edit, @post %>
+  <%= link_to "Edit", edit_post_path(@post) %>
+<% end %>
+<% if can? :destroy, @post %>
+  <%= link_to "Delete", post_path(@post), method: :delete, data: {confirm: "Are you sure"} %>
+<% end %>
 <p>Created By: <%= @post.user_full_name.titleize %></p>
