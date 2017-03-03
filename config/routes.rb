@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get "/about" => "home#about", as: :about_us
   resources :posts do
     resources :comments, only: [:create, :edit, :destroy, :update]
+    resources :likes, only: [:create, :destroy]
   end
   resources :sessions, only: [:new, :create] do
     delete :destroy, on: :collection

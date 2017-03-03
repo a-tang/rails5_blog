@@ -28,7 +28,6 @@ before_action :authenticate_user!, except: [:index, :show]
 
   def destroy
     @post.destroy
-    # redirect_to posts_path
     redirect_to root_path, alert: "access defined" unless can? :destroy, @post
   end
 
@@ -38,6 +37,7 @@ before_action :authenticate_user!, except: [:index, :show]
 
   def index
     @posts = Post.all
+    @post_total = Post.count
     if params[:search]
       @posts = Post.search(params[:search]).order("created_at DESC")
     else
@@ -62,5 +62,14 @@ before_action :authenticate_user!, except: [:index, :show]
   def find_owned_post
     @post = current_user.posts.find params[:id]
   end
+
+  def like_for(user)
+   likes.find_by_user_id user if user
+  end
+
+  def user_like
+    @user_like ||= @post.like_for(current_user)
+  end
+  helper_method :user_like
 
 end

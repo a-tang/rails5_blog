@@ -6,6 +6,15 @@ class Ability
 
     alias_action :create, :read, :update, :destroy, :to => :crud
 
+    can :like, Post do |q|
+  # user can't like their own questions
+      q.user != user
+    end
+
+    can :destroy, Like do |l|
+      l.user == user
+    end
+
     can :crud, Post do |p|
       p.user == user && user.persisted?
     end
