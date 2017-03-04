@@ -43,6 +43,7 @@ before_action :authenticate_user!, except: [:index, :show]
     else
       @posts = Post.all.order('created_at DESC')
     end
+    @posts = @posts.page(params[:page]).per(10)
   end
 
   def show
